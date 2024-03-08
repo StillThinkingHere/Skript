@@ -1,0 +1,65 @@
+on join:
+    if {Joined::%uuid of player%} is not set:
+        set {Joined::%uuid of player%} to true
+        if player's name is in {"Assassin1", "Assassin2", "Assassin3"}:
+            send "&7Hello assassin!" to player
+            execute console command "/lp user %player% parent set groupname assassin"
+            send "&7Your group has been set to Assassin!"
+            set {Group::%uuid of player%} to "Assassin"
+
+        else if player's name is "PixelEmpire":
+            send "&6Hello King!" to player
+            execute console command "/lp user %player% parent set groupname builder"
+            send "&6Your group has been set to King!"
+            set {Group::%uuid of player%} to "King"
+
+        else:
+            send "&7Hello guard!" to player
+            execute console command "/lp user %player% parent set groupname guard"
+            send "&7Your group has been set to Guard!"
+            set {Group::%uuid of player%} to "Guard"
+
+    else:
+        send "&7Welcome " + {Group::%uuid of player%} + "&7, that goes by the name of %player%!" to player
+    
+
+on join:
+    if player's name matches ".*Assassin[1-3]":
+        send "&7Hello assassin!" to player
+        execute console command "/lp user %player% parent set group assassin"
+        set {Group::%uuid of player%} to "Assassin"
+        send "&7Your group has been set to Assassin!" to player
+    else if player's name is "PixelEmpire":
+        send "&6Hello King!" to player
+        execute console command "/lp user %player% parent set group builder"
+        set {Group::%uuid of player%} to "King"
+        send "&6Your group has been set to King!" to player
+    else:
+        send "&7Hello guard!" to player
+        execute console command "/lp user %player% parent set group guard"
+        set {Group::%uuid of player%} to "Guard"
+        send "&7Your group has been set to Guard!" to player
+on damage:
+    attacker is a player
+    victim is a player
+    cancel event
+    send "&cYou cannot damage a player from the same group!" to attacker
+
+command /spawn:
+    cooldown: 900 seconds
+    cooldown message: &7Please wait %remaining time% before going to spawn again!
+    trigger:
+        send "test" to player
+        execute player command "/warp Spawn"
+
+command /nigga:
+    trigger:
+        spawn a slime at the player
+        send "&c&ltest" to the console
+        send "&c&ltest" to the console
+        send "&c&ltest" to the console
+        send "&c&ltest" to the console
+
+on death of slime:
+    if event-entity named "a&lGardia&5 &lBoss world":
+        send "testNigga" to players

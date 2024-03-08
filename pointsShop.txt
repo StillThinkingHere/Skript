@@ -1,0 +1,100 @@
+command /setvouchers:
+    trigger:
+        set {ScoutItem} to name tag of mending with lore "&e&lScout"
+        set {TitanItem} to name tag of mending with lore "<##ff9736>&lTitan"
+        set {LegendItem} to name tag of mending with lore "&a&lLegend"
+        set {OverlordItem} to name tag of mending with lore "<##f9500a>&lOverlord"
+        set {PrimeItem} to name tag of mending with lore "<##f65874>&lPrime"
+        
+function tokenShop(p: player):        
+    set {_gui} to a new chest inventory with 5 row with name "&e&lPoints Shop:"
+    set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 and 44 of {_gui} to black stained glass pane named " " 
+    set slot 11 of {_gui} to paper named "&e&lScout" with lore "&b&lsome lore 1" with all flags hidden
+    set slot 12 of {_gui} to paper named "<##ff9736>&lTitan" with lore "&b&lsome lore 2" with all flags hidden
+    set slot 13 of {_gui} to paper named "&a&lLegend" with lore "&b&lsome lore 3" with all flags hidden
+    set slot 14 of {_gui} to paper named "<##f9500a>&lOverlord" with lore "&b&lsome lore 4" with all flags hidden
+    set slot 15 of {_gui} to paper named "<##f65874>&lPrime" with lore "&b&lsome lore 5" with all flags hidden
+    set slot 31 of {_gui} to gold block of mending named "&7Balance: &f%{Points::%uuid of {_p}%}%" with all flags hidden
+    set slot 31 of {_gui} to gold block of mending named "&7Balance: &f0" with all flags hidden
+    open {_gui} to {_p} 
+
+on inventory click:
+    if name of event-inventory is "&e&lPoints Shop:":
+        cancel event
+        if event-slot is 11:
+            if {Points::%uuid of player%} is higher than 100:
+                play sound "block.grindstone.use" with volume 0.5 to the player
+                subtract 100 from {Points::%uuid of player%} 
+                give {ScoutItem} to player
+
+        if event-slot is 12:               
+            if {Points::%uuid of player%} is higher than 130:
+                play sound "block.grindstone.use" with volume 0.5 to the player
+                subtract 130 from {Points::%uuid of player%} 
+                give {TitanItem} to player
+                
+        if event-slot is 13:
+            if {Points::%uuid of player%} is higher than 200:
+                play sound "block.grindstone.use" with volume 0.5 to the player
+                subtract 200 from {Points::%uuid of player%} 
+                give {LegendItem} to player
+
+        if event-slot is 14:
+            if {Points::%uuid of player%} is higher than 400:
+                play sound "block.grindstone.use" with volume 0.5 to the player
+                subtract 400 from {Points::%uuid of player%} 
+                give {OverlordItem} to player
+
+        if event-slot is 15:
+            if {Points::%uuid of player%} is higher than 600:
+                play sound "block.grindstone.use" with volume 0.5 to the player
+                subtract 600 from {Points::%uuid of player%} 
+                give {PrimeItem} to player
+
+on tab complete of "/set-player-points":
+    set tab completions for position 1 to 1, 100, 1000, 10000
+
+on tab complete of "/give-player-xp":
+    set tab completions for position 1 to 1, 100, 1000, 10000
+
+command /test-points-gui:
+    permission: op
+    permission message: &4Stop! &cYou cant use this command!
+    trigger:
+        tokenShop(player)            
+
+command /give-player-points <player> <number>:
+    permission: op
+    permission message: &4Stop! &cYou cant use this command!
+    trigger:
+        if arg-1 not set:
+            send "Incorect usage: /give-player-points <player> <amount>" to player
+        else if arg-2 not set:
+            send "Incorect usage: /give-player-points <player> <amount>" to player
+        else:
+            add arg-2 to {Points::%uuid of arg-1%}
+            send "&7Gave %{arg-1}% %{arg-2}% Points!" to player
+    
+command /set-player-points <player> <number>:
+    permission: op
+    permission message: &4Stop! &cYou cant use this command!
+    trigger:
+        if arg-1 not set:
+            send "Incorect usage: /set-player-points <player> <amount>" to player
+        else if arg-2 not set:
+            send "Incorect usage: /set-player-points <player> <amount>" to player
+        else:
+            set {Points::%uuid of arg-1%} to arg-2
+            send "&7Set %{arg-1}%'s points to %{arg-2}%!" to player
+
+command /restet-player-points <player> <number>:
+    permission: op
+    permission message: &4Stop! &cYou cant use this command!
+    trigger:
+        if arg-1 not set:
+            send "Incorect usage: /restet-player-points <player>" to player
+        else if arg-2 not set:
+            send "Incorect usage: /restet-player-points <player>" to player
+        else:
+            set {Points::%uuid of arg-1%} to 0
+            send "&7Set %{arg-1}%'s points to 0!" to player
